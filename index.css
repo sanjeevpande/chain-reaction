@@ -10,7 +10,7 @@ li{
 	display:inline-block;
 	background-color: burlywood;
 }
-div{
+.container{
 	margin-left:200px;
 	margin-top:70px;
 }
@@ -30,4 +30,19 @@ div{
 }
 .blue{
 	background-color: blue;
+}
+@-webkit-keyframes rotateBall
+{
+	from {
+		-webkit-transform: rotateY(0deg);
+	}
+	to {
+		-webkit-transform: rotateY(360deg);
+	}
+}
+.rotateB{
+	-webkit-animation: rotateBall 2s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-play-state: running;
 }
