@@ -1,17 +1,38 @@
-var fs = require('fs');
-    http = require('http');
-    url = require('url');
- 
-http.createServer(function(req, res){
+var handler = function(req, res) {
+
     var request = url.parse(req.url, true);
     var action = request.pathname;
+     
+    if (action == '/jquery.js') {
+        var img = fs.readFileSync('./jquery.js');
+        res.writeHead(200, {'Content-Type': 'text/javascript' });
+        res.end(img, 'binary');
+    }
+    else if (action == '/index.js') {
+        var img = fs.readFileSync('./index.js');
+        res.writeHead(200, {'Content-Type': 'text/javascript' });
+        res.end(img, 'binary');
+    }
+    else if (action == '/index.css') {
+        var img = fs.readFileSync('./index.css');
+        res.writeHead(200, {'Content-Type': 'text/css' });
+        res.end(img, 'binary');
+    }
+    else { 
+        fs.readFile('./index.html', function (err, data) {
+            if(err){
+                throw err;
+            }
+            res.writeHead(200);
+            res.end(data);
+        });    
+    }
+}
+var app = require('http').createServer(handler);
+var io = require('socket.io').listen(app);
+var fs = require('fs');
+var url = require('url');
+
+var port = process.env.PORT || 3000;
  
-if (action == '/logo.gif') {
-    var img = fs.readFileSync('./logo.gif');
-    res.writeHead(200, {'Content-Type': 'image/gif' });
-    res.end(img, 'binary');
-  }else { 
-    res.writeHead(200, {'Content-Type': 'text/plain' });
-    res.end('Hello World \n');
-  }
-}).listen(2000, '127.0.0.1');
+app.listen(port);
