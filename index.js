@@ -6,6 +6,19 @@ $(document).ready(function(){
 		'blue' : false
 	},
 
+	
+
+	currentPlayersColor = function(){
+		
+		var flippedPlayers = {};
+
+		flippedPlayers[players["red"]] = "red";
+		flippedPlayers[players["green"]] = "green";
+		flippedPlayers[players["blue"]] = "blue";
+
+		return flippedPlayers[true];
+	},
+
 	restrictClick = function(clickedBox){
 		
 		var clickedStatus = true;
@@ -30,20 +43,65 @@ $(document).ready(function(){
 		if(clickedBox.find('.ball').length === 1){
 			ball = "<span class='ball ball1'></span>";
 			clickedBox.find('div').append(ball);
-			clickedBox.find('.ball1').css('margin-left', '30px');
+			//clickedBox.find('.ball1').css('margin-left', '30px');
 		}
 		else if(clickedBox.find('.ball').length === 2){
 			ball = "<span class='ball ball2'></span>";
 			clickedBox.find('div').append(ball);
-			clickedBox.find('.ball1').css('margin-left', '20px');
+			clickedBox.find('.ball2').css('margin-left', '20px');
 			clickedBox.find('.ball2').css('margin-top', '25px');
 
 			clickedBox.find('div').addClass('rotateB');
 
 		}
+		else if(clickedBox.find('.ball').length === 3){
+			
+			var prevBox = clickedBox.prev('li'),
+				nextBox = clickedBox.next('li'),
+				currentPlayerColor = clickedBox.css('border-color');
+
+			if(prevBox.find('span').length){
+				
+				if(prevBox.find('span').length === 1){
+					ball = "<span class='ball ball1'></span>";	
+				}
+				else if(prevBox.find('span').length === 2){
+					ball = "<span class='ball ball2'></span>";	
+				}
+				prevBox.find('span').parent().append(ball);
+			}
+			else{
+				ball = "<div><span class='ball'></span></div>";
+				prevBox.append(ball);	
+			}
+
+			if(nextBox.find('span').length){
+				if(nextBox.find('span').length === 1){
+					ball = "<span class='ball ball1'></span>";	
+				}
+				else if(nextBox.find('span').length === 2){
+					ball = "<span class='ball ball2'></span>";	
+				}
+				nextBox.find('span').parent().append(ball);
+			}
+			else{
+				ball = "<div><span class='ball'></span></div>";
+				nextBox.append(ball);	
+			}
+			
+			prevBox.find('span').css('background-color', currentPlayerColor);
+	
+			nextBox.find('span').css('background-color', currentPlayerColor);
+
+			
+			clickedBox.find('span').remove();
+
+		}
 		else{
+			
 			ball = "<div><span class='ball'></span></div>";
 			clickedBox.append(ball);	
+
 		}
 	},
 
@@ -85,7 +143,7 @@ $(document).ready(function(){
 
 
 	$('li').on('click', function(){
-		
+
 		var $this = $(this);
 
 		var clickedStatus = restrictClick($this);

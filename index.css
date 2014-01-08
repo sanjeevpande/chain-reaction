@@ -23,6 +23,13 @@ li{
 	width: 25px;
 	border-radius: 15px;
 }
+.ball1{
+	margin-left: 30px;
+}
+.ball2{
+	margin-left: 20px;
+	margin-top: 25px;
+}
 .green{
 	background-color: green;
 }
