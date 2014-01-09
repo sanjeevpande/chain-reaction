@@ -8,8 +8,8 @@ var handler = function(req, res) {
         res.writeHead(200, {'Content-Type': 'text/javascript' });
         res.end(img, 'binary');
     }
-    else if (action == '/index.js') {
-        var img = fs.readFileSync('./index.js');
+    else if (action == '/index-min.js') {
+        var img = fs.readFileSync('./index-min.js');
         res.writeHead(200, {'Content-Type': 'text/javascript' });
         res.end(img, 'binary');
     }
