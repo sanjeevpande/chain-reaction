@@ -67,7 +67,7 @@ $(document).ready(function(){
 				currentPlayerColor = clickedBox.css('border-top-color');
 
 			
-			clickedBox.find('span').remove();
+			clickedBox.find('div').remove();
 
 
 			appendToClickedBox(clickedBox, prevBox, currentPlayerColor);
@@ -99,17 +99,17 @@ $(document).ready(function(){
 		if(boxObject.find('span').length){
 			if(boxObject.find('span').length === 1){
 				ball = "<span class='ball ball1'></span>";	
+				boxObject.find('span').parent().append(ball);
 			}
 			else if(boxObject.find('span').length === 2){
 				ball = "<span class='ball ball2'></span>";	
 				boxObject.find('div').addClass('rotateB');
+				boxObject.find('span').parent().append(ball);
 			}
 			else if(boxObject.find('span').length === 3){
 				boxObject.find('span').css('background-color', currentPlayerColor);
-				clickedBox.find('span').remove();
-				boxObject.trigger('click');
-			}
-			boxObject.find('span').parent().append(ball);
+				boxObject.trigger('myClick');
+			}	
 		}
 		else{
 			ball = "<div><span class='ball'></span></div>";
@@ -169,4 +169,20 @@ $(document).ready(function(){
 		assignPlayerTurn($this);
 
 	});
+
+
+	$('li').on('myClick', function(){
+
+		var $this = $(this);
+
+		var clickedStatus = restrictClick($this);
+		
+		if(!clickedStatus){
+			return;
+		}
+
+		appendBall($this);
+
+	});
+
 });
