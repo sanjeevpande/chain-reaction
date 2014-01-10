@@ -43,9 +43,20 @@ li{
 {
 	from {
 		-webkit-transform: rotateY(0deg);
+		transform: rotateY(0deg);
 	}
 	to {
 		-webkit-transform: rotateY(360deg);
+		transform: rotateY(360deg);
+	}
+}
+@keyframes rotateBall
+{
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
+		transform: rotateY(360deg);
 	}
 }
 .rotateB{
@@ -53,4 +64,8 @@ li{
 	-webkit-animation-timing-function: linear;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-play-state: running;
+	animation: rotateBall 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-play-state: running;
 }

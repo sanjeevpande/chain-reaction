@@ -25,7 +25,7 @@ $(document).ready(function(){
 		
 		if(clickedBox.find('span').length){
 
-			var currentPlayersColor = clickedBox.css('border-color'),
+			var currentPlayersColor = clickedBox.css('border-top-color'),
 				boxOwnerColor = clickedBox.find('span').css('background-color');
 
 
@@ -64,67 +64,18 @@ $(document).ready(function(){
 				clickedBoxIndex = clickedBox.index(),
 				prevParentBox = prevParentRow.find('li').eq(clickedBoxIndex),
 				nextParentBox = nextParentRow.find('li').eq(clickedBoxIndex),
-				currentPlayerColor = clickedBox.css('border-color');
-
-			if(prevBox.find('span').length){
-				
-				if(prevBox.find('span').length === 1){
-					ball = "<span class='ball ball1'></span>";	
-				}
-				else if(prevBox.find('span').length === 2){
-					ball = "<span class='ball ball2'></span>";	
-				}
-				prevBox.find('span').parent().append(ball);
-			}
-			else{
-				ball = "<div><span class='ball'></span></div>";
-				prevBox.append(ball);	
-			}
-
-			if(nextBox.find('span').length){
-				if(nextBox.find('span').length === 1){
-					ball = "<span class='ball ball1'></span>";	
-				}
-				else if(nextBox.find('span').length === 2){
-					ball = "<span class='ball ball2'></span>";	
-				}
-				nextBox.find('span').parent().append(ball);
-			}
-			else{
-				ball = "<div><span class='ball'></span></div>";
-				nextBox.append(ball);	
-			}
-
-			if(prevParentBox.find('span').length){
-				if(prevParentBox.find('span').length === 1){
-					ball = "<span class='ball ball1'></span>";	
-				}
-				else if(prevParentBox.find('span').length === 2){
-					ball = "<span class='ball ball2'></span>";	
-				}
-				prevParentBox.find('span').parent().append(ball);
-			}
-			else{
-				ball = "<div><span class='ball'></span></div>";
-				prevParentBox.append(ball);	
-			}
-
-			if(nextParentBox.find('span').length){
-				if(nextParentBox.find('span').length === 1){
-					ball = "<span class='ball ball1'></span>";	
-				}
-				else if(nextParentBox.find('span').length === 2){
-					ball = "<span class='ball ball2'></span>";	
-				}
-				nextParentBox.find('span').parent().append(ball);
-			}
-			else{
-				ball = "<div><span class='ball'></span></div>";
-				nextParentBox.append(ball);	
-			}
-
+				currentPlayerColor = clickedBox.css('border-top-color');
 
 			
+			clickedBox.find('span').remove();
+
+
+			appendToClickedBox(clickedBox, prevBox, currentPlayerColor);
+			appendToClickedBox(clickedBox, nextBox, currentPlayerColor);
+			appendToClickedBox(clickedBox, prevParentBox, currentPlayerColor);
+			appendToClickedBox(clickedBox, nextParentBox, currentPlayerColor);
+
+
 			prevBox.find('span').css('background-color', currentPlayerColor);
 	
 			nextBox.find('span').css('background-color', currentPlayerColor);
@@ -132,8 +83,7 @@ $(document).ready(function(){
 			prevParentBox.find('span').css('background-color', currentPlayerColor);
 	
 			nextParentBox.find('span').css('background-color', currentPlayerColor);
-			
-			clickedBox.find('span').remove();
+
 
 		}
 		else{
@@ -143,6 +93,29 @@ $(document).ready(function(){
 
 		}
 	},
+
+	appendToClickedBox = function(clickedBox, boxObject, currentPlayerColor){
+
+		if(boxObject.find('span').length){
+			if(boxObject.find('span').length === 1){
+				ball = "<span class='ball ball1'></span>";	
+			}
+			else if(boxObject.find('span').length === 2){
+				ball = "<span class='ball ball2'></span>";	
+				boxObject.find('div').addClass('rotateB');
+			}
+			else if(boxObject.find('span').length === 3){
+				boxObject.find('span').css('background-color', currentPlayerColor);
+				clickedBox.find('span').remove();
+				boxObject.trigger('click');
+			}
+			boxObject.find('span').parent().append(ball);
+		}
+		else{
+			ball = "<div><span class='ball'></span></div>";
+			boxObject.append(ball);	
+		}
+	}
 
 	assignPlayerTurn = function(clickedBox){
 
