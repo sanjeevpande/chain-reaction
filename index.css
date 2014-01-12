@@ -39,6 +39,27 @@ li{
 .blue{
 	background-color: blue;
 }
+.yellow{
+	background-color: yellow;
+}
+.pink{
+	background-color: pink;
+}
+.brown{
+	background-color: brown;
+}
+.cyan{
+	background-color: cyan;
+}
+.violet{
+	background-color: violet;
+}
+.indigo{
+	background-color: indigo;
+}
+.orange{
+	background-color: orange;
+}
 @-webkit-keyframes rotateBall
 {
 	from {
@@ -68,4 +89,10 @@ li{
 	animation-timing-function: linear;
 	animation-iteration-count: infinite;
 	animation-play-state: running;
+}
+.hide{
+	display: none;
+}
+.show{
+	display: block;
 }

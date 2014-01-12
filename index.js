@@ -1,14 +1,53 @@
 $(document).ready(function(){
 
-	var players = {
+
+	var players;
+
+	
+	$('#start').on('click', function(){
+		
+		
+		var noOfPlayers = parseInt($('#inputBox').val(), 10);
+
+		if(noOfPlayers < 2 || noOfPlayers > 10){
+
+			alert("Players can be max 10 and min 2");
+			return;
+		}
+
+		$('.inputContainer').addClass('hide');
+		$('.container').removeClass('hide').addClass('show');
+
+		var ballColors = ['red', 'green', 'blue', 'yellow', 'pink', 'brown', 'cyan', 'violet', 'indigo', 'orange'];
+
+		var JSONString = '{';
+
+		for(var i=0; i<noOfPlayers; i++){
+
+			JSONString += '"'+ballColors[i]+'"'+':'+false+',';
+
+		}
+
+		JSONString += '}';
+
+		JSONString = JSONString.replace(",}","}");
+
+		players = $.parseJSON(JSONString);
+
+		players[Object.keys(players)[0]] = true;
+
+		var x = 5;
+
+	});
+
+	/*var players = {
+		
 		'red' : true,
 		'green' : false,
 		'blue' : false
-	},
-
+	};*/
 	
-
-	currentPlayersColor = function(){
+	/*currentPlayersColor = function(){
 		
 		var flippedPlayers = {};
 
@@ -17,9 +56,9 @@ $(document).ready(function(){
 		flippedPlayers[players["blue"]] = "blue";
 
 		return flippedPlayers[true];
-	},
+	},*/
 
-	restrictClick = function(clickedBox){
+	var	restrictClick = function(clickedBox){
 		
 		var clickedStatus = true;
 		
@@ -200,6 +239,16 @@ $(document).ready(function(){
 					ball = "<span class='ball ball2'></span>";	
 					boxObject.find('div').addClass('rotateB');
 					boxObject.find('span').parent().append(ball);
+
+
+					if(boxObject.find('span').length > 2 && (boxObject[0] === $('ul:first').find('li').eq(boxObject.index())[0]
+						|| boxObject[0] === $('ul:last').find('li').eq(boxObject.index())[0]
+						|| boxObject[0] === $('ul').find('li:first').eq(boxObject.parent().index())[0]
+						|| boxObject[0] === $('ul').find('li:last').eq(boxObject.parent().index())[0])){
+
+						boxObject.find('span').css('background-color', currentPlayerColor);
+						boxObject.trigger('myClick');
+					}
 				}
 			}
 			else if(boxObject.find('span').length === 3){
@@ -211,9 +260,41 @@ $(document).ready(function(){
 			ball = "<div><span class='ball'></span></div>";
 			boxObject.append(ball);	
 		}
-	}
+	},
 
-	assignPlayerTurn = function(clickedBox){
+	
+	counter = 0,
+
+	assignPlayerTurn = function(clickedBox){	
+
+		var key = Object.keys(players);
+
+		if(players[key[counter]]){
+			
+			clickedBox.find('.ball').addClass(key[counter]);
+
+			
+			if(counter === key.length-1){
+
+				counter = -1;
+
+			}
+
+			$('li').css('border-color', key[counter+1]);
+
+			for(player in players){
+
+				players[player] = false;
+			}
+
+			players[key[counter+1]] = true;
+
+			counter++;
+
+		}			
+	};
+
+	/*assignPlayerTurn = function(clickedBox){
 
 		if(players["red"]){
 			clickedBox.find('.ball').addClass('red');
@@ -247,7 +328,7 @@ $(document).ready(function(){
 			players["blue"] = false;
 			return;
 		}
-	};
+	};*/
 
 
 	$('li').on('click', function(){
