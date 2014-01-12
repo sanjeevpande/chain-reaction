@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
 
-	var players;
+	var players,
+		doAllPlayersClicked = false;
 
 	
 	$('#start').on('click', function(){
@@ -25,6 +26,8 @@ $(document).ready(function(){
 
 		for(var i=0; i<noOfPlayers; i++){
 
+			//JSONString += '"'+ballColors[i]+'"'+':'+'{"turn":'+false+','+'"isAlive"'+':'+true+'},';
+
 			JSONString += '"'+ballColors[i]+'"'+':'+false+',';
 
 		}
@@ -40,24 +43,6 @@ $(document).ready(function(){
 		var x = 5;
 
 	});
-
-	/*var players = {
-		
-		'red' : true,
-		'green' : false,
-		'blue' : false
-	};*/
-	
-	/*currentPlayersColor = function(){
-		
-		var flippedPlayers = {};
-
-		flippedPlayers[players["red"]] = "red";
-		flippedPlayers[players["green"]] = "green";
-		flippedPlayers[players["blue"]] = "blue";
-
-		return flippedPlayers[true];
-	},*/
 
 	var	restrictClick = function(clickedBox){
 		
@@ -76,6 +61,22 @@ $(document).ready(function(){
 		return clickedStatus;
 	},
 
+	currentPlayerObject = function(){
+
+		var currentPlayer;
+
+		for(var playerColor in players){
+
+			if(players[playerColor]){
+				currentPlayer = playerColor;
+				break;
+			}
+		}
+
+		return currentPlayer;
+
+	},
+
 	appendBall = function(clickedBox){
 
 		var ball;
@@ -88,7 +89,8 @@ $(document).ready(function(){
 				clickedBoxIndex = clickedBox.index(),
 				prevParentBox = prevParentRow.find('li').eq(clickedBoxIndex),
 				nextParentBox = nextParentRow.find('li').eq(clickedBoxIndex),
-				currentPlayerColor = clickedBox.css('border-top-color');
+				currentPlayerColor = clickedBox.css('border-top-color'),
+				cPlayerColor = currentPlayerObject();
 
 		if(clickedBox.find('.ball').length === 1){
 			
@@ -108,19 +110,23 @@ $(document).ready(function(){
 
 
 				prevBox.find('span').css('background-color', currentPlayerColor);
+				prevBox.find('span').attr('data-color', cPlayerColor);
 		
 				nextBox.find('span').css('background-color', currentPlayerColor);
+				nextBox.find('span').attr('data-color', cPlayerColor);
 
 				prevParentBox.find('span').css('background-color', currentPlayerColor);
+				prevParentBox.find('span').attr('data-color', cPlayerColor);
 		
 				nextParentBox.find('span').css('background-color', currentPlayerColor);
+				nextParentBox.find('span').attr('data-color', cPlayerColor);
 
-				/*event.stopPropogation();*/
 			}
 			else{
 				
 				ball = "<span class='ball ball1'></span>";
 				clickedBox.find('div').append(ball);
+				clickedBox.find('span').attr('data-color', cPlayerColor);
 			}
 		}
 		else if(clickedBox.find('.ball').length === 2){
@@ -141,14 +147,17 @@ $(document).ready(function(){
 
 
 				prevBox.find('span').css('background-color', currentPlayerColor);
-		
+				prevBox.find('span').attr('data-color', cPlayerColor);
+
 				nextBox.find('span').css('background-color', currentPlayerColor);
+				nextBox.find('span').attr('data-color', cPlayerColor);
 
 				prevParentBox.find('span').css('background-color', currentPlayerColor);
-		
-				nextParentBox.find('span').css('background-color', currentPlayerColor);
+				prevParentBox.find('span').attr('data-color', cPlayerColor);
 
-				/*event.stopPropogation();*/
+				nextParentBox.find('span').css('background-color', currentPlayerColor);
+				nextParentBox.find('span').attr('data-color', cPlayerColor);
+
 			}
 			else{
 
@@ -156,6 +165,8 @@ $(document).ready(function(){
 				clickedBox.find('div').append(ball);
 				clickedBox.find('.ball2').css('margin-left', '20px');
 				clickedBox.find('.ball2').css('margin-top', '25px');
+				
+				clickedBox.find('span').attr('data-color', cPlayerColor);
 
 				clickedBox.find('div').addClass('rotateB');
 
@@ -163,12 +174,8 @@ $(document).ready(function(){
 
 		}
 		else if(clickedBox.find('.ball').length === 3){
-			
-			
-
-			
+									
 			clickedBox.find('div').remove();
-
 
 			appendToClickedBox(clickedBox, prevBox, currentPlayerColor);
 			appendToClickedBox(clickedBox, nextBox, currentPlayerColor);
@@ -177,19 +184,23 @@ $(document).ready(function(){
 
 
 			prevBox.find('span').css('background-color', currentPlayerColor);
-	
+			prevBox.find('span').attr('data-color', cPlayerColor);
+
 			nextBox.find('span').css('background-color', currentPlayerColor);
+			nextBox.find('span').attr('data-color', cPlayerColor);
 
 			prevParentBox.find('span').css('background-color', currentPlayerColor);
-	
-			nextParentBox.find('span').css('background-color', currentPlayerColor);
+			prevParentBox.find('span').attr('data-color', cPlayerColor);	
 
+			nextParentBox.find('span').css('background-color', currentPlayerColor);
+			nextParentBox.find('span').attr('data-color', cPlayerColor);
 
 		}
 		else{
 			
 			ball = "<div><span class='ball'></span></div>";
 			clickedBox.append(ball);	
+			clickedBox.find('span').attr('data-color', cPlayerColor);
 
 		}
 	},
@@ -200,6 +211,8 @@ $(document).ready(function(){
 			return;
 		}
 
+		var cPlayerColor = currentPlayerObject();
+
 		if(boxObject.find('span').length){
 			if(boxObject.find('span').length === 1){
 
@@ -209,11 +222,13 @@ $(document).ready(function(){
 					|| clickedBox[0] === $('ul:last').find('li:last')[0]){
 
 					boxObject.find('span').css('background-color', currentPlayerColor);
+					boxObject.find('span').attr('data-color', cPlayerColor);
 					boxObject.trigger('myClick');
 				}
 				else{
 					ball = "<span class='ball ball1'></span>";	
 					boxObject.find('span').parent().append(ball);
+					boxObject.find('span').attr('data-color', cPlayerColor);
 
 					if(boxObject.find('span').length > 1 && (boxObject[0] === $('ul:first').find('li:first')[0]
 						|| boxObject[0] === $('ul:first').find('li:last')[0]
@@ -221,6 +236,7 @@ $(document).ready(function(){
 						|| boxObject[0] === $('ul:last').find('li:last')[0])){
 
 						boxObject.find('span').css('background-color', currentPlayerColor);
+						boxObject.find('span').attr('data-color', cPlayerColor);
 						boxObject.trigger('myClick');
 					}					
 				}
@@ -233,6 +249,7 @@ $(document).ready(function(){
 					|| clickedBox[0] === $('ul').find('li:last').eq(clickedBox.parent().index())[0]){
 
 					boxObject.find('span').css('background-color', currentPlayerColor);
+					boxObject.find('span').attr('data-color', cPlayerColor);
 					boxObject.trigger('myClick');
 
 				}
@@ -240,6 +257,7 @@ $(document).ready(function(){
 					ball = "<span class='ball ball2'></span>";	
 					boxObject.find('div').addClass('rotateB');
 					boxObject.find('span').parent().append(ball);
+					boxObject.find('span').attr('data-color', cPlayerColor);
 
 
 					if(boxObject.find('span').length > 2 && (boxObject[0] === $('ul:first').find('li').eq(boxObject.index())[0]
@@ -248,89 +266,90 @@ $(document).ready(function(){
 						|| boxObject[0] === $('ul').find('li:last').eq(boxObject.parent().index())[0])){
 
 						boxObject.find('span').css('background-color', currentPlayerColor);
+						boxObject.find('span').attr('data-color', cPlayerColor);
 						boxObject.trigger('myClick');
 					}
 				}
 			}
 			else if(boxObject.find('span').length === 3){
 				boxObject.find('span').css('background-color', currentPlayerColor);
+				boxObject.find('span').attr('data-color', cPlayerColor);
 				boxObject.trigger('myClick');
 			}	
 		}
 		else{
 			ball = "<div><span class='ball'></span></div>";
-			boxObject.append(ball);	
+			boxObject.append(ball);
+			boxObject.find('span').attr('data-color', cPlayerColor);	
 		}
 	},
 
 	
+
 	counter = 0,
+
+
+	checkPlayersAvailability = function(playersList){
+
+		var isPlayerEliminated = false,
+			currentPlayerColor = $('li').css('border-top-color');
+
+		for(var i=0; i<playersList.length; i++){
+
+			if(doAllPlayersClicked && !$('span[data-color='+playersList[i]+']').length){
+
+				delete players[playersList[i]];
+
+			}
+		}
+	},
+
+	
+	
 
 	assignPlayerTurn = function(clickedBox){	
 
-		var key = Object.keys(players);
+		var playersList = Object.keys(players);
 
-		if(players[key[counter]]){
+		checkPlayersAvailability(playersList);
+
+		playersList = Object.keys(players);
+
+
+		if(playersList.length === 1){
+
+			alert(playersList[0]+" win.");
+			$('li').off('click');
+			return;
+		}
+
+		if(players[playersList[counter]]){
 			
-			clickedBox.find('.ball').addClass(key[counter]);
+			clickedBox.find('.ball').addClass(playersList[counter]);
 
 
-			if(counter === key.length-1){
+			if(counter === playersList.length-1){
 
 				counter = -1;
 
+				doAllPlayersClicked = true;
+
 			}
 
-			$('li').css('border-color', key[counter+1]);
+
+			$('li').css('border-color', playersList[counter+1]);
 
 			for(player in players){
 
 				players[player] = false;
 			}
 
-			players[key[counter+1]] = true;
+			players[playersList[counter+1]] = true;
 
 			counter++;
 
 		}			
 	};
-
-	/*assignPlayerTurn = function(clickedBox){
-
-		if(players["red"]){
-			clickedBox.find('.ball').addClass('red');
-
-			$('li').css('border-color', 'green');
-
-			players["red"] = false;
-			players["green"] = true;
-			players["blue"] = false;
-			return;
-		}
-		
-		if(players["green"]){
-			clickedBox.find('.ball').addClass('green');
-
-			$('li').css('border-color', 'blue');
-
-			players["red"] = false;
-			players["green"] = false;
-			players["blue"] = true;
-			return;
-		}
-		
-		if(players["blue"]){
-			clickedBox.find('.ball').addClass('blue');
-
-			$('li').css('border-color', 'red');
-
-			players["red"] = true;
-			players["green"] = false;
-			players["blue"] = false;
-			return;
-		}
-	};*/
-
 
 	$('li').on('click', function(){
 
