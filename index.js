@@ -17,6 +17,7 @@ $(document).ready(function(){
 
 		$('.inputContainer').addClass('hide');
 		$('.container').removeClass('hide').addClass('show');
+		$('body').css('background-color', '#888830');
 
 		var ballColors = ['red', 'green', 'blue', 'yellow', 'pink', 'brown', 'cyan', 'violet', 'indigo', 'orange'];
 
@@ -273,7 +274,7 @@ $(document).ready(function(){
 			
 			clickedBox.find('.ball').addClass(key[counter]);
 
-			
+
 			if(counter === key.length-1){
 
 				counter = -1;

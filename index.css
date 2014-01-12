@@ -96,3 +96,19 @@ li{
 .show{
 	display: block;
 }
+.inputContainer{
+	position: absolute;
+	margin-top: 20%;
+	margin-left: 35%;
+}
+body{
+	background-color: brown;
+}
+#inputBox{
+	height: 20px;
+	width: 220px;
+}
+#start{
+	height: 24px;
+	width: 50px;
+}
